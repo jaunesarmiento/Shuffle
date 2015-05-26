@@ -33,6 +33,8 @@ Then, run the following command:
 $ pod install
 ```
 
+Then in your __Build Phases -> Link Binary With Libraries__, add `Shuffle.framework` to be able to use Shuffle in your project.
+
 ### Manually
 
 If you prefer not to use either of the aforementioned dependency managers, you can integrate Shuffle into your project manually.
@@ -54,5 +56,7 @@ $ git submodule add https://github.com/Shuffle/Shuffle.git
 - In the tab bar at the top of that window, open the "General" panel.
 - Click on the `+` button under the "Embedded Binaries" section.
 - And that's it!
+
 > The `Shuffle.framework` is automagically added as a target dependency, linked framework and embedded framework in a copy files build phase which is all you need to build on the simulator and a device.
+
 ---
