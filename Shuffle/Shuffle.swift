@@ -102,8 +102,6 @@ public class CardManager {
     
     func pop() {
         if cardStack.count > 0 {
-            let topCardView = cardStack[0] as! UIView
-            
             // No need to remove it from the superview since the CardView handles that, just remove it from the stack.
             cardStack.removeObjectAtIndex(0)
         }
@@ -119,16 +117,16 @@ extension CardManager: CardViewDelegate {
         })
     }
     
-    func didSwipeCardView(cardView: CardView, withDirection direction: CardViewSwipeDirection) {
+    @objc public func didSwipeCardView(cardView: CardView, withDirection direction: CardViewSwipeDirection) {
         delegate?.cardManagerDidPopCardView?(cardView, withDirection: direction)
         pop()
     }
     
-    func didTapCardView(cardView: CardView) {
+    @objc public func didTapCardView(cardView: CardView) {
         delegate?.cardManagerDidTapCardView?(cardView)
     }
     
-    func cardView(cardView: CardView, didChangePositionToPoint point: CGPoint) {
+    @objc public func cardView(cardView: CardView, didChangePositionToPoint point: CGPoint) {
         delegate?.cardView?(cardView, didChangePositionToPoint: point)
     }
 
@@ -189,7 +187,7 @@ public class CardView: UIView {
         backgroundColor = UIColor.clearColor()
     }
     
-    required public init(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
@@ -203,17 +201,17 @@ public class CardView: UIView {
         deltaY = point.y
         
         // Compute the rotation and scale of the cardView at its current position
-        var rotationFromDistance = min(deltaX / CGFloat(rotationStrength), CGFloat(rotationMax))
-        var rotationAngleFromDistance = CGFloat(rotationAngle) * CGFloat(rotationFromDistance)
-        var scale = max(1 - fabs(rotationFromDistance) / CGFloat(scaleStrength), CGFloat(scaleMax))
+        let rotationFromDistance = min(deltaX / CGFloat(rotationStrength), CGFloat(rotationMax))
+        let rotationAngleFromDistance = CGFloat(rotationAngle) * CGFloat(rotationFromDistance)
+        let scale = max(1 - fabs(rotationFromDistance) / CGFloat(scaleStrength), CGFloat(scaleMax))
         
-        var xCurrent = originalPoint!.x + deltaX
-        var yCurrent = originalPoint!.y + deltaY
+        let xCurrent = originalPoint!.x + deltaX
+        let yCurrent = originalPoint!.y + deltaY
         
         center = CGPointMake(xCurrent, yCurrent)
         
-        var transform: CGAffineTransform = CGAffineTransformMakeRotation(CGFloat(rotationAngleFromDistance))
-        var scaleTransform: CGAffineTransform = CGAffineTransformScale(transform, scale, scale)
+        let transform: CGAffineTransform = CGAffineTransformMakeRotation(CGFloat(rotationAngleFromDistance))
+        let scaleTransform: CGAffineTransform = CGAffineTransformScale(transform, scale, scale)
         
         // Transform the cardView
         self.view.transform = scaleTransform
@@ -330,17 +328,17 @@ public class CardView: UIView {
     }
     
     public func swipeRight() {
-        var point = CGPointMake(UIScreen.mainScreen().bounds.width + self.frame.width, self.center.y)
+        let point = CGPointMake(UIScreen.mainScreen().bounds.width + self.frame.width, self.center.y)
         forceSwipeToPoint(point)
     }
     
     public func swipeLeft() {
-        var point = CGPointMake(-(UIScreen.mainScreen().bounds.width + self.frame.width), self.center.y)
+        let point = CGPointMake(-(UIScreen.mainScreen().bounds.width + self.frame.width), self.center.y)
         forceSwipeToPoint(point)
     }
     
     public func swipeDown() {
-        var point = CGPointMake(self.center.x, UIScreen.mainScreen().bounds.height + self.frame.height)
+        let point = CGPointMake(self.center.x, UIScreen.mainScreen().bounds.height + self.frame.height)
         forceSwipeToPoint(point)
     }
     
