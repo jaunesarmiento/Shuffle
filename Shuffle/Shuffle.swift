@@ -191,11 +191,11 @@ public class CardView: UIView {
         super.init(coder: aDecoder)
     }
 
-    private func didStartDraggingCardView() {
+    internal func didStartDraggingCardView() {
         self.originalPoint = center
     }
     
-    private func didChangePositionToPoint(point: CGPoint) {
+    internal func didChangePositionToPoint(point: CGPoint) {
         
         deltaX = point.x
         deltaY = point.y
@@ -221,7 +221,7 @@ public class CardView: UIView {
         
     }
     
-    private func didEndDraggingCardViewToPoint(point: CGPoint) {
+    internal func didEndDraggingCardViewToPoint(point: CGPoint) {
         
         let distance = sqrt(pow(point.x, 2) + pow(point.y, 2))
         
@@ -239,7 +239,7 @@ public class CardView: UIView {
         }
     }
     
-    private func didSwipeCardViewWithDirection(direction: CardViewSwipeDirection) {
+    internal func didSwipeCardViewWithDirection(direction: CardViewSwipeDirection) {
         var finishPoint: CGPoint!
         
         switch direction {
@@ -268,7 +268,7 @@ public class CardView: UIView {
         
     }
     
-    private func forceSwipeToPoint(point: CGPoint) {
+    internal func forceSwipeToPoint(point: CGPoint) {
         originalPoint = center
         
         deltaX = point.x
@@ -286,7 +286,7 @@ public class CardView: UIView {
         )
     }
     
-    private func angleForPoint(point: CGPoint) -> Float {
+    internal func angleForPoint(point: CGPoint) -> Float {
         // Determine the angle of point
         let radians = Float(atan2(point.y, point.x))
         let degrees = Float(radians * 180.0 / Float(M_PI))
@@ -298,7 +298,7 @@ public class CardView: UIView {
         }
     }
     
-    private func swipeDirectionForAngle(angle: Float) -> CardViewSwipeDirection {
+    internal func swipeDirectionForAngle(angle: Float) -> CardViewSwipeDirection {
         if angle >= 60 && angle < 120 {
             return .Up
         } else if angle >= 120 && angle < 240 {
@@ -310,7 +310,7 @@ public class CardView: UIView {
         }
     }
     
-    private func beingDragged(gestureRecognizer: UIPanGestureRecognizer) {
+    internal func beingDragged(gestureRecognizer: UIPanGestureRecognizer) {
         
         switch (gestureRecognizer.state) {
         case UIGestureRecognizerState.Began:
