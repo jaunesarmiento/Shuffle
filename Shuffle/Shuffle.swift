@@ -25,7 +25,7 @@ import Foundation
     optional func cardManagerDidTapCardView(cardView: CardView)
     optional func cardManagerDidPushCardView(cardView: CardView)
     optional func cardManagerDidPopCardView(cardView: CardView, withDirection: CardViewSwipeDirection)
-    optional func cardManagerShouldCommitSwipe(completed: (commit: Bool) -> Void)
+    optional func cardManagerShouldCommitSwipeForDirection(direction: CardViewSwipeDirection, completed: (commit: Bool) -> Void)
     optional func cardView(cardView: CardView, didChangePositionToPoint poing: CGPoint)
     func generateCardView() -> CardView
 }
@@ -112,7 +112,7 @@ public class CardManager {
 
 extension CardManager: CardViewDelegate {
     @objc public func cardViewShouldCommitSwipe(cardView: CardView, withDirection direction: CardViewSwipeDirection, completed: (completed: Bool) -> Void) {
-        delegate?.cardManagerShouldCommitSwipe?({ (commit) -> Void in
+        delegate?.cardManagerShouldCommitSwipeForDirection?(direction, completed: { (commit) -> Void in
             completed(completed: commit)
         })
     }
@@ -169,6 +169,8 @@ public class CardView: UIView {
     
     public var delegate: CardViewDelegate?
     
+    @IBOutlet public weak var shadowView: UIView?
+    @IBOutlet public weak var contentView: UIView?
     @IBOutlet public weak var view: UIView!
     
     override public init(frame: CGRect) {
@@ -184,11 +186,25 @@ public class CardView: UIView {
         
         originalPoint = center
         
-        backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clearColor()
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        // shadowView?.backgroundColor = UIColor.clearColor()
+        shadowView?.layer.cornerRadius = 2
+        shadowView?.layer.shadowRadius = 4
+        shadowView?.layer.shadowOpacity = 0.1
+        shadowView?.layer.shadowOffset = CGSizeMake(0, 2)
+        shadowView?.layer.shouldRasterize = true
+        
+        contentView?.layer.cornerRadius = 2
+        contentView?.clipsToBounds = true
     }
 
     internal func didStartDraggingCardView() {
